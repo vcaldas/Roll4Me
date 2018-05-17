@@ -1,4 +1,4 @@
-TOKEN = '548521253:AAEA6jgci6DR2IrgoF9TTIc5pmf86o3UJKM'
+TOKEN = ""
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
