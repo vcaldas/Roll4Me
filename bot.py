@@ -41,7 +41,7 @@ def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
 
-def get_dice_params(args):
+def get_dice_params(args, separator):
     """
 
     :param args: Argument containing the number of dice and the faces, ex. d10, d20, 2D10, 4D6
@@ -51,12 +51,12 @@ def get_dice_params(args):
     args = ' '.join (args).upper ()
     # Format can be DN or XDN
 
-    parts = args.split("D")
+    parts = args.split(separator)
 
     if parts[0] == "":
         parts[0] == 1
 
-    return parts[0], parts[1]
+    return int(parts[0]), int(parts[1])
 
 
 def roll_dice(n,f):
@@ -79,13 +79,29 @@ def roll_dice(n,f):
 
 def roll(bot, update, args):
 
-    n, f = get_dice_params(args)
+    n, f = get_dice_params(args, "D")
 
 
     rolls = roll_dice(n,f)
     #bot.send_message (chat_id=update.message.chat_id, text=text_caps)
    # update.message.reply_text (text_caps)
     update.message.reply_text("Rolling {} : {}".format(args, rolls) )
+
+
+def count_success(condition, seq):
+    """Returns the amount of successes in a sequence of roll """
+    return sum(1 for item in seq if item >= condition)
+
+
+def wod_roll(bot, update, args):
+    """"
+    World of Destruction Rolls
+    """
+    n, f = get_dice_params(args, " ")
+    rolls = roll_dice(n,10)
+    success = count_success(f, rolls)
+
+    update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, f,rolls,  success))
 
 
 def main():
@@ -100,6 +116,7 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("roll", roll, pass_args=True))
+    dp.add_handler(CommandHandler("wod", wod_roll, pass_args=True))
 
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
