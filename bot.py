@@ -92,6 +92,14 @@ def count_success(condition, seq):
     """Returns the amount of successes in a sequence of roll """
     return sum(1 for item in seq if item >= condition)
 
+def count_fail(condition, seq):
+    """Returns the amount of fails in a sequence of roll """
+    return sum(1 for item in seq if item < condition)
+
+def count_ones(seq):
+    """Returns the amount of critical failures in a sequence of roll """
+    return sum(1 for item in seq if item == 1)
+
 
 def wod_roll(bot, update, args):
     """"
@@ -100,8 +108,12 @@ def wod_roll(bot, update, args):
     n, f = get_dice_params(args, " ")
     rolls = roll_dice(n,10)
     success = count_success(f, rolls)
+    fails = count_success(f, rolls)
+    critical_fail = count_ones(rolls)
 
-    update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, f,rolls,  success))
+
+
+    update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, f,rolls,  success - critical_fail))
 
 
 def main():
@@ -119,7 +131,7 @@ def main():
     dp.add_handler(CommandHandler("wod", wod_roll, pass_args=True))
 
     # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text, echo))
+  #  dp.add_handler(MessageHandler(Filters.text, echo))
 
     # log all errors
     dp.add_error_handler(error)
