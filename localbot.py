@@ -13,6 +13,7 @@ import os
 
 
 
+
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -22,25 +23,25 @@ logger = logging.getLogger(__name__)
 
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
-def start(update):
+def start(bot, update):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Oi! Ainda não corrijo erros. Digite /roll NdF, ex. 3d10"')
 
 
-def help(update):
+def help(bot, update):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help! Please, help!!!')
 
 
-def echo(update):
+def echo(bot, update):
     """Echo the user message."""
     update.message.reply_text(update.message.text)
 
 
-def error(update):
+def error(bot,update):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, error)
-
+    bot.send_message(chat_id=update.message.chat_id, text="I'm sorry {} I'm afraid I can't do that.".format(update.message.chat_id))
 
 def get_dice_params(args, separator):
     """
@@ -97,31 +98,29 @@ def count_ones(seq):
     """Returns the amount of critical failures in a sequence of roll """
     return sum(1 for item in seq if item == 1)
 
+def unknown(bot, update):
+    bot.send_message (chat_id=update.message.chat_id, text="Sorry, I didn't understand that command.")
+
 
 def wod_roll(bot, update, args):
     """"
     World of Destruction Rolls
     """
     n, f = get_dice_params(args, " ")
-    rolls = roll_dice(n,10)
+    rolls = roll_dice(n, 10)
     success = count_success(f, rolls)
     fails = count_success(f, rolls)
     critical_fail = count_ones(rolls)
 
-    update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, f, rolls,
-                                                                                              success - critical_fail))
-
-def unknown(bot, update):
-    bot.send_message (chat_id=update.message.chat_id, text="Desculpas. Não entendi esse comando.")
-
+    text = "Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, f, rolls, success - critical_fail)
+    bot.send_message (chat_id=update.message.chat_id, text=text)
 
 
 def main():
-    token = os.environ['TELEGRAM_TOKEN']
     """Start the bot."""
     print ('Running bot... ')
     # Create the EventHandler and pass it your bot's token.
-    updater = Updater(token)
+    updater = Updater('554385129:AAEgmB88ttbxKG91LKBQyT4_yHtyIaDEv4o')
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -132,7 +131,6 @@ def main():
     dp.add_handler(CommandHandler("roll", roll, pass_args=True))
     dp.add_handler(CommandHandler("wod", wod_roll, pass_args=True))
     dp.add_handler(MessageHandler(Filters.command, unknown))
-
     # on noncommand i.e message - echo the message on Telegram
     dp.add_handler(MessageHandler(Filters.text, echo))
 
@@ -146,20 +144,6 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
-
-
-# def main():
-    # parser = argparse.ArgumentParser ()
-    #
-    # parser.add_argument("token", help="The telegram bot token", type=str)
-    # parser.add_argument("-l", "--log", help="Log the rolls for statistics",
-    #                      action="store_true")
-    #
-    # args = parser.parse_args()
-    # if args.log:
-    #     print('Logging rolls on server')
-    #
-    # bot(args.token, args.log)
 
 
 
