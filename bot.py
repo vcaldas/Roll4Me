@@ -177,6 +177,7 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler (CommandHandler ("xp", xp))
     dp.add_handler(CommandHandler("roll", roll, pass_args=True))
     dp.add_handler(CommandHandler("wod", wod_roll, pass_args=True))
     dp.add_handler(MessageHandler(Filters.command, unknown))
