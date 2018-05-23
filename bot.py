@@ -9,7 +9,7 @@ A must have for RPG Fans.
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import random
-import sys, getopt
+import sys
 import argparse
 
 
@@ -22,22 +22,22 @@ logger = logging.getLogger(__name__)
 
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
-def start(bot, update):
+def start(update):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Oi! Ainda não corrijo erros. Digite /roll NdF, ex. 3d10"')
 
 
-def help(bot, update):
+def help(update):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
+    update.message.reply_text('Help! Please, help!!!')
 
 
-def echo(bot, update):
+def echo(update):
     """Echo the user message."""
     update.message.reply_text(update.message.text)
 
 
-def error(bot, update, error):
+def error(update):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, error)
 
@@ -60,20 +60,18 @@ def get_dice_params(args, separator):
     return int(parts[0]), int(parts[1])
 
 
-def roll_dice(n,f):
+def roll_dice(n, f):
     """
-
     :param n: Number of dices to roll
     :param f: Number of faces in the dice
     :return: List of results
     """
     n = int(n)
     f = int(f)
-
     rolls = []
 
-    for j in range (n):
-        rolls.append (random.randint (1, f))
+    for j in range(n):
+        rolls.append(random.randint(1, f))
 
     return rolls
 
@@ -81,21 +79,19 @@ def roll_dice(n,f):
 def roll(bot, update, args):
 
     n, f = get_dice_params(args, "D")
-
-
     rolls = roll_dice(n,f)
-    #bot.send_message (chat_id=update.message.chat_id, text=text_caps)
-   # update.message.reply_text (text_caps)
-    update.message.reply_text("Rolling {} : {}".format(args, rolls) )
+    update.message.reply_text("Rolling {} : {}".format(args, rolls))
 
 
 def count_success(condition, seq):
     """Returns the amount of successes in a sequence of roll """
     return sum(1 for item in seq if item >= condition)
 
+
 def count_fail(condition, seq):
     """Returns the amount of fails in a sequence of roll """
     return sum(1 for item in seq if item < condition)
+
 
 def count_ones(seq):
     """Returns the amount of critical failures in a sequence of roll """
@@ -112,16 +108,15 @@ def wod_roll(bot, update, args):
     fails = count_success(f, rolls)
     critical_fail = count_ones(rolls)
 
+    update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, f, rolls,
+                                                                                              success - critical_fail))
 
 
-    update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, f,rolls,  success - critical_fail))
-
-
-def run(TOKEN, log):
+def bot(token, log):
     """Start the bot."""
     print ('Running bot... ')
     # Create the EventHandler and pass it your bot's token.
-    updater = Updater(TOKEN)
+    updater = Updater(token)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -133,7 +128,7 @@ def run(TOKEN, log):
     dp.add_handler(CommandHandler("wod", wod_roll, pass_args=True))
 
     # on noncommand i.e message - echo the message on Telegram
-  #  dp.add_handler(MessageHandler(Filters.text, echo))
+    dp.add_handler(MessageHandler(Filters.text, echo))
 
     # log all errors
     dp.add_error_handler(error)
@@ -147,24 +142,19 @@ def run(TOKEN, log):
     updater.idle()
 
 
-
-
-def main(args):
+def main():
     parser = argparse.ArgumentParser ()
 
-    parser.add_argument ("token", help="The telegram bot token", type=str)
-    parser.add_argument ("-l", "--log", help="Log the rolls for statistics",
+    parser.add_argument("token", help="The telegram bot token", type=str)
+    parser.add_argument("-l", "--log", help="Log the rolls for statistics",
                          action="store_true")
 
     args = parser.parse_args()
     if args.log:
         print('Logging rolls on server')
 
-
-
-    run(args.token, args.log)
+    bot(args.token, args.log)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
-
+    main()
