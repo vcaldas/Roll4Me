@@ -47,8 +47,8 @@ def dice_format(roll):
 
     n = 1
 
-    roll = str (roll.upper ())
-    parts = roll.split ('D')
+
+    parts = roll.split('d') if 'd' in roll else roll.split('D')
 
     # Get number of dice
     n = 1 if parts[0] == '' else parts[0]
