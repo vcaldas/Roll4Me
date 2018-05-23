@@ -42,45 +42,75 @@ def error(update):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
 
-def get_dice_params(args, separator):
-    """
+def dice_format(roll):
+    """"""
 
-    :param args: Argument containing the number of dice and the faces, ex. d10, d20, 2D10, 4D6
-    :return: n number of dice to roll
-             f number of faces in the dice
-    """
-    args = ' '.join (args).upper ()
-    # Format can be DN or XDN
+    n = 1
 
-    parts = args.split(separator)
+    roll = str (roll.upper ())
+    parts = roll.split ('D')
 
-    if parts[0] == "":
-        parts[0] == 1
+    # Get number of dice
+    n = 1 if parts[0] == '' else parts[0]
 
-    return int(parts[0]), int(parts[1])
+    if '+' in parts[1]:
+        parts = parts[1].split ('+')
+        faces = parts[0]
+        modifier = '+'
+        value = parts[1]
+
+    elif '-' in parts[1]:
+        parts = parts[1].split ('-')
+        faces = parts[0]
+        modifier = '-'
+        value = parts[1]
+
+    else:
+        faces = parts[1]
+        modifier = '+'
+        value = 0
+
+    return n, faces, modifier, value
+
+# def get_dice_params(args, separator):
+#     """
+#
+#     :param args: Argument containing the number of dice and the faces, ex. d10, d20, 2D10, 4D6
+#     :return: n number of dice to roll
+#              f number of faces in the dice
+#     """
+#     args = ' '.join (args).upper ()
+#     # Format can be DN or XDN
+#
+#     parts = args.split(separator)
+#
+#     if parts[0] == "":
+#         parts[0] == 1
+#
+#     return int(parts[0]), int(parts[1])
 
 
-def roll_dice(n, f):
+def roll_dice(n, faces):
     """
     :param n: Number of dices to roll
     :param f: Number of faces in the dice
     :return: List of results
     """
     n = int(n)
-    f = int(f)
+    faces = int(faces)
     rolls = []
 
     for j in range(n):
-        rolls.append(random.randint(1, f))
+        rolls.append(random.randint(1, faces))
 
     return rolls
 
 
 def roll(bot, update, args):
+    n, faces, modifier, value = dice_format(args)
 
-    n, f = get_dice_params(args, "D")
-    rolls = roll_dice(n,f)
-    update.message.reply_text("Rolling {} : {}".format(args, rolls))
+    rolls = roll_dice(n, faces)
+    bot.send_message (chat_id=update.message.chat_id, text="Rolling {} : {}".format(args, rolls))
 
 
 def count_success(condition, seq):
@@ -102,13 +132,13 @@ def wod_roll(bot, update, args):
     """"
     World of Destruction Rolls
     """
-    n, f = get_dice_params(args, " ")
+    n, faces = dice_format(args)
     rolls = roll_dice(n,10)
-    success = count_success(f, rolls)
-    fails = count_success(f, rolls)
+    success = count_success(faces, rolls)
+    fails = count_success(faces, rolls)
     critical_fail = count_ones(rolls)
 
-    update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, f, rolls,
+    update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, faces, rolls,
                                                                                               success - critical_fail))
 
 def unknown(bot, update):
