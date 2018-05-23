@@ -151,7 +151,7 @@ def wod_roll(bot, update, args):
     """
     args = ' '.join(args).upper()
     print('The args are {}'.format(args))
-    n, faces = dice_format(args)
+    n, faces = dice_format(args[0])
     rolls = roll_dice(n,10)
     success = count_success(faces, rolls)
     fails = count_success(faces, rolls)
