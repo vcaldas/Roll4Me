@@ -146,6 +146,7 @@ def wod_roll(bot, update, args):
     """"
     World of Destruction Rolls
     """
+    args = " ".join(args)
     n, faces = dice_format(args)
     rolls = roll_dice(n,10)
     success = count_success(faces, rolls)
