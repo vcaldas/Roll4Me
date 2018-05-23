@@ -89,27 +89,41 @@ def dice_format(roll):
 #
 #     return int(parts[0]), int(parts[1])
 
+def roll_modifier(rolls, modifier, value):
+    if modifier == '+':
+        return [x + value for x in rolls]
+    if modifier == '-':
+        return [x - value for x in rolls]
 
-def roll_dice(n, faces):
+
+def roll_dice(n, faces, modifier, value):
     """
     :param n: Number of dices to roll
     :param f: Number of faces in the dice
     :return: List of results
     """
-    n = int(n)
-    faces = int(faces)
+    n = int (n)
+    faces = int (faces)
     rolls = []
 
-    for j in range(n):
-        rolls.append(random.randint(1, faces))
+    for j in range (n):
+        rolls.append (random.randint (1, faces))
+
+    print (rolls)
+    # Apply modifiers
+    rolls = roll_modifier (rolls, modifier, value)
+
+    # Fix rolls
+    # In case the modifier put the dice higher than the faces
+    rolls = [faces if x > faces else x for x in rolls]
+    rolls = [1 if x < 1 else x for x in rolls]
 
     return rolls
 
 
 def roll(bot, update, args):
     n, faces, modifier, value = dice_format(args)
-
-    rolls = roll_dice(n, faces)
+    rolls = roll_dice( n, faces, modifier, value)
     bot.send_message (chat_id=update.message.chat_id, text="Rolling {} : {}".format(args, rolls))
 
 
