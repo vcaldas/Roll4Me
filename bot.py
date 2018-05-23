@@ -8,10 +8,7 @@ A must have for RPG Fans.
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
-import random
-import os
-import urllib3
-
+from Roll import Roll, WodRoll
 
 
 # Enable logging
@@ -38,111 +35,19 @@ def echo(bot, update):
     update.message.reply_text(update.message.text)
 
 
-def error(update):
+def error(bot, update):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, error)
 
-
-def dice_format(roll):
-    """"""
-
-    n = 1
-    print('The roll is {}'.format(roll))
-    parts = roll[0].split('D')
-
-    # Get number of dice
-    n = 1 if parts[0] == '' else parts[0]
-
-    if '+' in parts[1]:
-        parts = parts[1].split ('+')
-        faces = parts[0]
-        modifier = '+'
-        value = parts[1]
-
-    elif '-' in parts[1]:
-        parts = parts[1].split ('-')
-        faces = parts[0]
-        modifier = '-'
-        value = parts[1]
-
-    else:
-        faces = parts[1]
-        modifier = '+'
-        value = 0
-
-    return n, faces, modifier, value
-
-# def get_dice_params(args, separator):
-#     """
-#
-#     :param args: Argument containing the number of dice and the faces, ex. d10, d20, 2D10, 4D6
-#     :return: n number of dice to roll
-#              f number of faces in the dice
-#     """
-#     args = ' '.join (args).upper ()
-#     # Format can be DN or XDN
-#
-#     parts = args.split(separator)
-#
-#     if parts[0] == "":
-#         parts[0] == 1
-#
-#     return int(parts[0]), int(parts[1])
-
-def roll_modifier(rolls, modifier, value):
-    if modifier == '+':
-        return [x + value for x in rolls]
-    if modifier == '-':
-        return [x - value for x in rolls]
-
-
-def roll_dice(n, faces, modifier, value):
-    """
-    :param n: Number of dices to roll
-    :param f: Number of faces in the dice
-    :return: List of results
-    """
-    n = int (n)
-    faces = int (faces)
-    rolls = []
-
-    for j in range (n):
-        rolls.append (random.randint (1, faces))
-
-    print (rolls)
-    # Apply modifiers
-    rolls = roll_modifier (rolls, modifier, value)
-
-    # Fix rolls
-    # In case the modifier put the dice higher than the faces
-    rolls = [faces if x > faces else x for x in rolls]
-    rolls = [1 if x < 1 else x for x in rolls]
-
-    return rolls
+def xp(bot, update):
+    bot.send_photo (chat_id=update.message.chat_id, photo=open ('img/xp.png', 'rb'))
 
 
 def roll(bot, update, args):
-    n, faces, modifier, value = dice_format(args)
-    rolls = roll_dice( n, faces, modifier, value)
-    bot.send_message (chat_id=update.message.chat_id, text="Rolling {} : {}".format(args, rolls))
+    args = args[0]
+    roll = Roll(args)
 
-
-def xp(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, img=urllib3.urlopen('https://i.imgur.com/I4T1p2B.png').read())
-
-def count_success(condition, seq):
-    """Returns the amount of successes in a sequence of roll """
-    return sum(1 for item in seq if item >= condition)
-
-
-def count_fail(condition, seq):
-    """Returns the amount of fails in a sequence of roll """
-    return sum(1 for item in seq if item < condition)
-
-
-def count_ones(seq):
-    """Returns the amount of critical failures in a sequence of roll """
-    return sum(1 for item in seq if item == 1)
+    bot.send_message (chat_id=update.message.chat_id, text="Rolling {} : {}".format(args, roll.roll_dice()))
 
 
 def wod_roll(bot, update, args):
@@ -150,15 +55,13 @@ def wod_roll(bot, update, args):
     World of Destruction Rolls
     """
     args = ' '.join(args).upper()
-    print('The args are {}'.format(args))
-    n, faces = dice_format(args[0])
-    rolls = roll_dice(n,10)
-    success = count_success(faces, rolls)
-    fails = count_success(faces, rolls)
-    critical_fail = count_ones(rolls)
 
-    update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, faces, rolls,
-                                                                                              success - critical_fail))
+    roll = WodRoll(args)
+    n, d, result, message = roll.roll_dice()
+
+    bot.send_message (chat_id=update.message.chat_id, text="Rolling {}d10 : Dificuldade {} \n"
+                                                           "Result: {} => {}".format(n,d,result, message ))
+
 
 def unknown(bot, update):
     bot.send_message (chat_id=update.message.chat_id, text="Desculpas. Não entendi esse comando.")
@@ -167,6 +70,7 @@ def unknown(bot, update):
 def main():
     token = os.environ['TELEGRAM_TOKEN']
     """Start the bot."""
+
     print ('Running bot... ')
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(token)
@@ -195,20 +99,6 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
-
-
-# def main():
-    # parser = argparse.ArgumentParser ()
-    #
-    # parser.add_argument("token", help="The telegram bot token", type=str)
-    # parser.add_argument("-l", "--log", help="Log the rolls for statistics",
-    #                      action="store_true")
-    #
-    # args = parser.parse_args()
-    # if args.log:
-    #     print('Logging rolls on server')
-    #
-    # bot(args.token, args.log)
 
 
 
