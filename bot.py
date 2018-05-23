@@ -46,9 +46,7 @@ def dice_format(roll):
     """"""
 
     n = 1
-
-
-    parts = roll.split('d') if 'd' in roll else roll.split('D')
+    parts = roll.split('D')
 
     # Get number of dice
     n = 1 if parts[0] == '' else parts[0]
@@ -146,7 +144,8 @@ def wod_roll(bot, update, args):
     """"
     World of Destruction Rolls
     """
-    args = " ".join(args)
+    args = " ".join(args).upper()
+
     n, faces = dice_format(args)
     rolls = roll_dice(n,10)
     success = count_success(faces, rolls)
