@@ -10,8 +10,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import random
 import os
-import sys
-import argparse
+
 
 
 # Enable logging
