@@ -1,4 +1,3 @@
-TOKEN = ""
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -10,6 +9,8 @@ A must have for RPG Fans.
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import random
+import sys, getopt
+import argparse
 
 
 # Enable logging
@@ -116,7 +117,7 @@ def wod_roll(bot, update, args):
     update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, f,rolls,  success - critical_fail))
 
 
-def main():
+def run(TOKEN):
     """Start the bot."""
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(TOKEN)
@@ -145,5 +146,32 @@ def main():
     updater.idle()
 
 
-if __name__ == '__main__':
-    main()
+
+
+def main(args):
+    TOKEN = ''
+    # try:
+    #     opts, args = getopt.getopt(argv, "t:", "token=")
+    # except getopt.GetoptError:
+    #     print('Error. Type bot.py -t <token-string>')
+    #     sys.exit(2)
+    # for opt, arg in opts:
+    #     if opt == '-h':
+    #         print('bot.py -t <token-string>')
+    #         sys.exit()
+    #     elif opt in ("-t", "--token"):
+    #         TOKEN = args.strip()
+
+    parser = argparse.ArgumentParser ()
+    parser.add_argument ("token", help="The telegram bot token", type=str)
+    args = parser.parse_args()
+    print(args.token)
+
+    print('Running bot... ')
+    print(args.token)
+    run(args.token)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
+
