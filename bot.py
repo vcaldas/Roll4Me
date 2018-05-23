@@ -42,7 +42,6 @@ def error(bot, update):
 def xp(bot, update):
     bot.send_photo (chat_id=update.message.chat_id, photo=open ('img/xp.png', 'rb'))
 
-
 def roll(bot, update, args):
     args = args[0]
     roll = Roll(args)
