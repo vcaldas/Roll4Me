@@ -23,17 +23,17 @@ logger = logging.getLogger(__name__)
 
 # Define a few command handlers. These usually take the two arguments bot and
 # update. Error handlers also receive the raised TelegramError object in error.
-def start(update):
+def start(bot, update):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Oi! Ainda não corrijo erros. Digite /roll NdF, ex. 3d10"')
 
 
-def help(update):
+def help(bot, update):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help! Please, help!!!')
 
 
-def echo(update):
+def echo(bot, update):
     """Echo the user message."""
     update.message.reply_text(update.message.text)
 
@@ -47,6 +47,7 @@ def dice_format(roll):
     """"""
 
     n = 1
+    print('The roll is {}'.format(roll))
     parts = roll.split('D')
 
     # Get number of dice
@@ -149,7 +150,7 @@ def wod_roll(bot, update, args):
     World of Destruction Rolls
     """
     args = ' '.join(args).upper()
-
+    print('The args are {}'.format(args))
     n, faces = dice_format(args)
     rolls = roll_dice(n,10)
     success = count_success(faces, rolls)
@@ -161,7 +162,6 @@ def wod_roll(bot, update, args):
 
 def unknown(bot, update):
     bot.send_message (chat_id=update.message.chat_id, text="Desculpas. Não entendi esse comando.")
-
 
 
 def main():
