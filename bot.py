@@ -10,6 +10,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import random
 import os
+import urllib3
 
 
 
@@ -124,6 +125,9 @@ def roll(bot, update, args):
     rolls = roll_dice( n, faces, modifier, value)
     bot.send_message (chat_id=update.message.chat_id, text="Rolling {} : {}".format(args, rolls))
 
+
+def xp(bot, update):
+    bot.send_message(chat_id=update.message.chat_id, img=urllib3.urlopen('https://i.imgur.com/I4T1p2B.png').read())
 
 def count_success(condition, seq):
     """Returns the amount of successes in a sequence of roll """
