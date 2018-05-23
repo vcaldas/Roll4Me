@@ -128,7 +128,11 @@ def roll(bot, update, args):
 
 
 def xp(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, img=urllib3.urlopen('https://i.imgur.com/I4T1p2B.png').read())
+    http = urllib3.PoolManager()
+    r = http.request('GET', 'http://i.imgur.com/I4T1p2B.png')
+
+    bot.send_message(chat_id=update.message.chat_id, img=r.data)
+
 
 def count_success(condition, seq):
     """Returns the amount of successes in a sequence of roll """
