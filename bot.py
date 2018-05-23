@@ -117,8 +117,9 @@ def wod_roll(bot, update, args):
     update.message.reply_text("Rolling {}d10  - Difficulty: {}. \n {} => {} Successes".format(n, f,rolls,  success - critical_fail))
 
 
-def run(TOKEN):
+def run(TOKEN, log):
     """Start the bot."""
+    print ('Running bot... ')
     # Create the EventHandler and pass it your bot's token.
     updater = Updater(TOKEN)
 
@@ -149,27 +150,19 @@ def run(TOKEN):
 
 
 def main(args):
-    TOKEN = ''
-    # try:
-    #     opts, args = getopt.getopt(argv, "t:", "token=")
-    # except getopt.GetoptError:
-    #     print('Error. Type bot.py -t <token-string>')
-    #     sys.exit(2)
-    # for opt, arg in opts:
-    #     if opt == '-h':
-    #         print('bot.py -t <token-string>')
-    #         sys.exit()
-    #     elif opt in ("-t", "--token"):
-    #         TOKEN = args.strip()
-
     parser = argparse.ArgumentParser ()
-    parser.add_argument ("token", help="The telegram bot token", type=str)
-    args = parser.parse_args()
-    print(args.token)
 
-    print('Running bot... ')
-    print(args.token)
-    run(args.token)
+    parser.add_argument ("token", help="The telegram bot token", type=str)
+    parser.add_argument ("-l", "--log", help="Log the rolls for statistics",
+                         action="store_true")
+
+    args = parser.parse_args()
+    if args.log:
+        print('Logging rolls on server')
+
+
+
+    run(args.token, args.log)
 
 
 if __name__ == "__main__":
