@@ -112,7 +112,7 @@ def wod_roll(bot, update, args):
                                                                                               success - critical_fail))
 
 
-def main(token, log):
+def main():
     token = os.environ['TELEGRAM_TOKEN']
     """Start the bot."""
     print ('Running bot... ')
