@@ -9,6 +9,7 @@ A must have for RPG Fans.
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import random
+import os
 import sys
 import argparse
 
@@ -112,7 +113,8 @@ def wod_roll(bot, update, args):
                                                                                               success - critical_fail))
 
 
-def bot(token, log):
+def main(token, log):
+    token = os.environ['TELEGRAM_TOKEN']
     """Start the bot."""
     print ('Running bot... ')
     # Create the EventHandler and pass it your bot's token.
@@ -142,18 +144,19 @@ def bot(token, log):
     updater.idle()
 
 
-def main():
-    parser = argparse.ArgumentParser ()
+# def main():
+    # parser = argparse.ArgumentParser ()
+    #
+    # parser.add_argument("token", help="The telegram bot token", type=str)
+    # parser.add_argument("-l", "--log", help="Log the rolls for statistics",
+    #                      action="store_true")
+    #
+    # args = parser.parse_args()
+    # if args.log:
+    #     print('Logging rolls on server')
+    #
+    # bot(args.token, args.log)
 
-    parser.add_argument("token", help="The telegram bot token", type=str)
-    parser.add_argument("-l", "--log", help="Log the rolls for statistics",
-                         action="store_true")
-
-    args = parser.parse_args()
-    if args.log:
-        print('Logging rolls on server')
-
-    bot(args.token, args.log)
 
 
 if __name__ == "__main__":
