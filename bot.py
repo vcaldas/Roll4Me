@@ -113,6 +113,7 @@ def roll(bot, update, args):
     rolls = roll_dice(n, faces)
     bot.send_message (chat_id=update.message.chat_id, text="Rolling {} : {}".format(args, rolls))
 
+
 def xp(bot, update):
     bot.send_message(chat_id=update.message.chat_id, img=urllib3.urlopen('https://i.imgur.com/I4T1p2B.png').read())
 
