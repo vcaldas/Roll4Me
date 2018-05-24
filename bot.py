@@ -9,6 +9,7 @@ A must have for RPG Fans.
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 from Roll import Roll, WodRoll
+import os
 
 
 # Enable logging
@@ -39,8 +40,10 @@ def error(bot, update):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, error)
 
+
 def xp(bot, update):
     bot.send_photo (chat_id=update.message.chat_id, photo=open ('img/xp.png', 'rb'))
+
 
 def roll(bot, update, args):
     args = args[0]
@@ -98,7 +101,6 @@ def main():
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
-
 
 
 if __name__ == "__main__":
