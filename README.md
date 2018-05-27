@@ -13,6 +13,7 @@ A polyhedral dice rolling bot for [Telegram](https://telegram.org). To use this 
  * `/wod N D`: Roll N D10 for difficulty D for World of Destruction games, e.g. Vampire, Werewolf, Mage, etc.  
     * example: `/wod 3 6`
 
+ * `/xp`: Display the table for spending experience points (for Vampire: The masquerade)
 
 
 
