@@ -1,10 +1,7 @@
 Roll4Me Bot
 ===========
 
-A python dice rolling bot for Telegram.
-
-# RollEm Telegram Bot
-A polyhedral dice rolling bot for [Telegram](https://telegram.org). To use this bot in Telegram, [click here](https://telegram.me/Roll4Me_bot). This bot was built to enable playing tabletop roleplaying games (RPGs) over Telegram.
+A python dice rolling bot for Telegram. To use this bot in Telegram, [click here](https://telegram.me/Roll4Me_bot). This bot was built to enable playing tabletop roleplaying games (RPGs) over Telegram.
 
 ## Usage
  * `/roll NdF` : Roll N dice with F Faces
