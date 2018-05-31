@@ -10,6 +10,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 from Roll import Roll, WodRoll
 import os
+import arquetipo as arq
 
 
 # Enable logging
@@ -40,6 +41,10 @@ def error(bot, update):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, error)
 
+def arquetipo(bot, update, args):
+    "Print arquetype information"
+    query = arq.get_info(args)
+    bot.send_message (chat_id=update.message.chat_id, text=query)
 
 def xp(bot, update):
     bot.send_photo (chat_id=update.message.chat_id, photo=open ('img/xp.png', 'rb'))
@@ -86,6 +91,9 @@ def main():
     dp.add_handler (CommandHandler("xp", xp))
     dp.add_handler(CommandHandler("roll", roll, pass_args=True))
     dp.add_handler(CommandHandler("wod", wod_roll, pass_args=True))
+    dp.add_handler (CommandHandler("arquetipo", arquetipo, pass_args=True))
+
+
     dp.add_handler(MessageHandler(Filters.command, unknown))
 
     # on noncommand i.e message - echo the message on Telegram
