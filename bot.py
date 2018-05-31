@@ -41,6 +41,7 @@ def error(bot, update):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, error)
 
+
 def arquetipo(bot, update, args):
     "Print arquetype information"
     query = arq.get_info(args[0])
@@ -91,7 +92,7 @@ def main():
     dp.add_handler (CommandHandler("xp", xp))
     dp.add_handler(CommandHandler("roll", roll, pass_args=True))
     dp.add_handler(CommandHandler("wod", wod_roll, pass_args=True))
-    dp.add_handler (CommandHandler("arquetipo", arquetipo, pass_args=True))
+    dp.add_handler(CommandHandler("arquetipo", arquetipo, pass_args=True))
 
 
     dp.add_handler(MessageHandler(Filters.command, unknown))
