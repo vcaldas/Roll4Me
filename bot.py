@@ -37,7 +37,7 @@ def echo(bot, update):
     update.message.reply_text(update.message.text)
 
 
-def error(bot, update):
+def error(bot, update, error):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, error)
 
