@@ -1,3 +1,26 @@
+import collections
+
+
+class CaseInsensitiveDict(collections.Mapping):
+    def __init__(self, d):
+        self._d = d
+        self._s = dict((k.lower(), k) for k in d)
+
+    def __contains__(self, k):
+        return k.lower() in self._s
+
+    def __len__(self):
+        return len(self._s)
+
+    def __iter__(self):
+        return iter(self._s)
+
+    def __getitem__(self, k):
+        return self._d[self._s[k.lower()]]
+
+    def actual_key_case(self, k):
+        return self._s.get(k.lower())
+
 arquetipos = {
     'Arquiteto': 'Você constrói algo de valor duradouro',
     'Autocrata': 'Você precisa de controle.',
@@ -54,7 +77,7 @@ def check_key(query):
     my_value = ""
 
     for key, value in arquetipos.items():
-        if query.upper() in key.upper():
+        if query.lower() in key.lower():
             flag = True
             my_key = key
             my_value = value
@@ -63,10 +86,12 @@ def check_key(query):
 
 
 def get_info(query):
+
     flag, key, value = check_key(query)
 
     if flag:
         return format_print(key, value)
     else:
         return "Arquetipo : " + query + "| não encontrado."
+
 

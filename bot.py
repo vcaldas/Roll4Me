@@ -43,7 +43,7 @@ def error(bot, update):
 
 def arquetipo(bot, update, args):
     "Print arquetype information"
-    query = arq.get_info(args)
+    query = arq.get_info(args[0])
     bot.send_message (chat_id=update.message.chat_id, text=query)
 
 def xp(bot, update):
