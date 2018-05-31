@@ -46,7 +46,7 @@ arquetipos = {
     'Malandro': ' Rir ofusca a dor.',
     'Mártir': ' Você sofre para o bem maior.',
     'Masoquista': ' A dor lembra que você ainda existe',
-    'Monstro': ' Você é Amaldiçoado, assim, aja como tal!',
+    'Monstro': ' Você é Amaldiçoado, assim, haja como tal!',
     'Olho da Tempestade': ' Caos e destruição o seguem, mas nunca chegam a você.',
     'Pedagogo': ' Você salva outros através do conhecimento.',
     'Penitente': ' A não-vida é uma maldição, e você deve expiar por isso',
