@@ -47,8 +47,21 @@ def arquetipo(bot, update, args):
     query = arq.get_info(args[0])
     bot.send_message (chat_id=update.message.chat_id, text=query)
 
+
 def xp(bot, update):
-    bot.send_photo (chat_id=update.message.chat_id, photo=open ('img/xp.png', 'rb'))
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('img/xp.png', 'rb'))
+
+
+def armor(bot, update):
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('img/tabela-de-armaduras.png', 'rb'))
+
+
+def melee(bot, update):
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('img/tabela-de-armas-brancas.png', 'rb'))
+
+
+def weapons(bot, update):
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('img/tabela-de-armas-de-longo-alcance.png', 'rb'))
 
 
 def roll(bot, update, args):
