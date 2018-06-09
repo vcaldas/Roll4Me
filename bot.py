@@ -106,6 +106,9 @@ def main():
     dp.add_handler(CommandHandler("roll", roll, pass_args=True))
     dp.add_handler(CommandHandler("wod", wod_roll, pass_args=True))
     dp.add_handler(CommandHandler("arquetipo", arquetipo, pass_args=True))
+    dp.add_handler (CommandHandler("armor", armor))
+    dp.add_handler (CommandHandler("melee", melee))
+    dp.add_handler (CommandHandler("weapons", weapons))
 
 
     dp.add_handler(MessageHandler(Filters.command, unknown))
