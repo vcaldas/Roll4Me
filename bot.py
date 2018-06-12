@@ -64,6 +64,10 @@ def weapons(bot, update):
     bot.send_photo(chat_id=update.message.chat_id, photo=open('img/tabela-de-armas-de-longo-alcance.png', 'rb'))
 
 
+def alesson(bot, update):
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('img/alesson.jpg', 'rb'))
+
+
 def roll(bot, update, args):
     args = args[0]
     roll = Roll(args)
@@ -109,6 +113,7 @@ def main():
     dp.add_handler (CommandHandler("armor", armor))
     dp.add_handler (CommandHandler("melee", melee))
     dp.add_handler (CommandHandler("weapons", weapons))
+    dp.add_handler (CommandHandler("alesson", alesson))
 
 
     dp.add_handler(MessageHandler(Filters.command, unknown))
