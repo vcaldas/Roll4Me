@@ -3,7 +3,9 @@ Roll4Me Bot
 [![BCH compliance](https://bettercodehub.com/edge/badge/vcaldas/Roll4Me?branch=master)](https://bettercodehub.com/)
 
 
-A python dice rolling bot for Telegram. To use this bot in Telegram, [click here](https://telegram.me/Roll4Me_bot). This bot was built to enable playing tabletop roleplaying games (RPGs) over Telegram.
+A very simple python dice rolling bot for Telegram. To use this bot in Telegram, [click here](https://telegram.me/Roll4Me_bot). This bot was built to enable playing tabletop roleplaying games (RPGs) over Telegram.
+
+It is currently served by [Heroku](http://www.heroku.com). 
 
 ## Usage
  * `/roll NdF` : Roll N dice with F Faces
